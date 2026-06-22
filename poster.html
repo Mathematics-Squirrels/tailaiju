@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泰来居海报</title>
+<style>
+  :root {
+    --bg: #fcf9f4;
+    --gold: #9b6c30;
+    --gold-light: #c8a06e;
+    --dark: #262018;
+    --white: #ffffff;
+    --warm: #f5eee2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px; height: 1920px;
+    background: var(--bg);
+    font-family: 'Songti SC', 'STSongti-SC', 'SimSun', 'Noto Serif CJK SC', serif;
+    overflow: hidden;
+    position: relative;
+    color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .top-band {
+    width: 100%; height: 72px;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 48px; letter-spacing: 0.5em;
+    font-family: 'Songti SC', serif;
+  }
+  .top-band::after {
+    content: ''; position: absolute; top: 72px; left: 0; right: 0; height: 2px;
+    background: var(--dark);
+  }
+
+  .section { position: relative; }
+
+  /* Hero */
+  .hero { padding: 120px 0 0; text-align: center; }
+  .hero h1 { font-size: 74px; font-weight: 600; line-height: 1.4; letter-spacing: 0.04em; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p.tagline { font-size: 22px; color: var(--gold-light); margin-top: 28px;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+
+  /* Hexagram */
+  .hexagram {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    margin: 36px auto;
+  }
+  .hexagram .line { height: 3px; border-radius: 2px; }
+  .hexagram .solid { width: 44px; background: var(--dark); }
+  .hexagram .broken { display: flex; gap: 10px; justify-content: center; }
+  .hexagram .broken span { width: 16px; height: 3px; border-radius: 2px; background: var(--gold); }
+
+  /* Cards */
+  .card-row { display: flex; gap: 14px; justify-content: center; padding: 0 80px; margin-top: 60px; }
+  .card {
+    flex: 1; max-width: 236px; background: #fff; border-radius: 14px;
+    padding: 36px 28px; position: relative;
+    border: 1px solid rgba(200,160,110,0.25);
+  }
+  .card::before {
+    content: ''; position: absolute; left: 0; top: 24px; bottom: 24px;
+    width: 4px; border-radius: 2px; background: var(--gold);
+  }
+  .card h3 { font-size: 30px; font-weight: 600; margin-bottom: 16px;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+  .card p { font-size: 17px; color: var(--gold); line-height: 1.7;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+
+  /* Mid */
+  .mid { text-align: center; padding: 100px 0 0; }
+  .mid .divider { width: 300px; height: 1px; background: rgba(200,160,110,0.3); margin: 0 auto 40px; }
+  .mid h2 { font-size: 42px; font-weight: 600; margin-bottom: 20px; }
+  .mid p { font-size: 22px; color: var(--gold);
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+  .mid .price {
+    display: inline-block; background: var(--gold); color: #fff;
+    font-size: 36px; padding: 16px 54px; border-radius: 18px; margin-top: 40px;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif;
+  }
+
+  /* QR */
+  .qr-section { display: flex; gap: 80px; justify-content: center; padding: 90px 0 0; }
+  .qr-block { text-align: center; }
+  .qr-block .qr-frame {
+    width: 280px; height: 280px; background: #fff; border-radius: 18px;
+    padding: 12px; border: 1px solid rgba(200,160,110,0.25);
+  }
+  .qr-block .qr-frame img { width: 100%; height: 100%; display: block; }
+  .qr-block .label { font-size: 22px; margin-top: 16px; font-weight: 600;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+  .qr-block .sublabel { font-size: 16px; color: var(--gold-light); margin-top: 4px;
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 80px 0 0; }
+  .footer .brand { font-size: 20px; color: var(--gold-light);
+    font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif; }
+
+  .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; }
+  .bottom-bar .gold-bar { height: 6px; background: var(--gold); }
+  .bottom-bar .dark-bar { height: 8px; background: var(--dark); }
+</style>
+</head>
+<body>
+
+<div class="top-band">泰 来 居</div>
+
+<div class="hero section">
+  <h1>有些事拿不准的时候<br><em>不妨问一卦</em></h1>
+  <p class="tagline">命理不是预言的机器，是理解处境的语法</p>
+  <div class="hexagram">
+    <div class="broken"><span></span><span></span></div>
+    <div class="broken"><span></span><span></span></div>
+    <div class="broken"><span></span><span></span></div>
+    <div class="line solid"></div>
+    <div class="line solid"></div>
+    <div class="line solid"></div>
+  </div>
+</div>
+
+<div class="card-row">
+  <div class="card"><h3>问感情</h3><p>两个人的合盘<br>看走向，也看关节</p></div>
+  <div class="card"><h3>问财运</h3><p>不问会不会发财<br>问这个阶段的流向</p></div>
+  <div class="card"><h3>问事业</h3><p>跳槽 · 转行 · 求学<br>卦给你方向</p></div>
+  <div class="card"><h3>问婚姻</h3><p>婚期 · 合盘 · 两家<br>帮你看清楚</p></div>
+</div>
+
+<div class="mid section">
+  <div class="divider"></div>
+  <h2>好的说好，不好说解法</h2>
+  <p>不编灾 · 不吓唬人 · 认真对待每一卦</p>
+  <div class="price">一卦 50</div>
+</div>
+
+<div class="qr-section">
+  <div class="qr-block">
+    <div class="qr-frame"><img src="qr-page.png" alt="主页"></div>
+    <div class="label">主页二维码</div>
+    <div class="sublabel">长按识别访问</div>
+  </div>
+  <div class="qr-block">
+    <div class="qr-frame"><img src="qr-wechat.jpg" alt="微信"></div>
+    <div class="label">粥粥不喝粥</div>
+    <div class="sublabel">长按识别添加微信</div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="brand">泰来居</div>
+</div>
+
+<div class="bottom-bar">
+  <div class="gold-bar"></div>
+  <div class="dark-bar"></div>
+</div>
+
+</body>
+</html>

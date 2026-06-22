@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root { --bg: #fafaf8; --gold: #9b7a4a; --gold-light: #c9b38c; --dark: #1c1c1e; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 800px; height: 960px; background: var(--bg);
+    font-family: 'Songti SC', 'STSongti-SC', serif;
+    display: flex; flex-direction: column; align-items: center;
+    -webkit-font-smoothing: antialiased;
+    border: 1px solid rgba(155,122,74,0.2);
+  }
+  .top-lines { display: flex; flex-direction: column; gap: 8px; margin-top: 56px; }
+  .top-lines div { height: 3px; border-radius: 2px; width: 240px; }
+  .top-lines div:nth-child(1), .top-lines div:nth-child(2) { background: var(--dark); }
+  .top-lines div:nth-child(3) { background: var(--gold); }
+
+  .hexagram { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 32px; }
+  .hexagram .broken-row { display: flex; gap: 10px; }
+  .hexagram .broken-row span { width: 19px; height: 3px; border-radius: 2px; background: var(--gold); }
+  .hexagram .solid-row { width: 52px; height: 3px; border-radius: 2px; background: var(--dark); }
+
+  h1 { font-size: 52px; font-weight: 600; letter-spacing: 0.4em; margin-top: 24px; color: var(--dark); }
+  .sub { font-size: 22px; color: var(--gold); margin-top: 12px; font-family: 'Hiragino Sans GB','PingFang SC',sans-serif; }
+  .divider { width: 200px; height: 1px; background: rgba(201,179,140,0.5); margin-top: 24px; }
+
+  .qr-wrap { margin-top: 36px; background: #fff; border-radius: 24px; padding: 16px;
+    border: 1px solid rgba(201,179,140,0.25); }
+  .qr-wrap img { width: 320px; height: 320px; display: block; }
+
+  .name { font-size: 22px; color: var(--dark); margin-top: 28px; font-family: 'Hiragino Sans GB','PingFang SC',sans-serif; }
+  .hexagram-sm { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 22px; }
+  .hexagram-sm .br { display: flex; gap: 6px; }
+  .hexagram-sm .br span { width: 11px; height: 2px; border-radius: 1px; background: var(--gold); }
+  .hexagram-sm .sr { width: 32px; height: 2px; border-radius: 1px; background: var(--dark); }
+</style>
+</head>
+<body>
+<div class="top-lines"><div></div><div></div><div></div></div>
+<div class="hexagram">
+  <div class="broken-row"><span></span><span></span></div>
+  <div class="broken-row"><span></span><span></span></div>
+  <div class="broken-row"><span></span><span></span></div>
+  <div class="solid-row"></div>
+  <div class="solid-row"></div>
+  <div class="solid-row"></div>
+</div>
+<h1>泰 来 居</h1>
+<div class="sub">扫码问卦</div>
+<div class="divider"></div>
+<div class="qr-wrap"><img src="qr-page.png" alt="QR"></div>
+<div class="name">粥粥不喝粥</div>
+<div class="hexagram-sm">
+  <div class="br"><span></span><span></span></div>
+  <div class="br"><span></span><span></span></div>
+  <div class="br"><span></span><span></span></div>
+  <div class="sr"></div><div class="sr"></div><div class="sr"></div>
+</div>
+</body>
+</html>
