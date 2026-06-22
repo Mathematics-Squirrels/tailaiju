@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>泰来居 · 粥粥</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --cream: #fdf6ee;
+    --warm-paper: #faf3e8;
+    --wood: #c4a882;
+    --wood-dark: #8b6914;
+    --ink: #3d2b1a;
+    --ink-light: #6b5a4a;
+    --sunlight: #fce4c8;
+    --blossom: #f4d4d8;
+    --red-seal: #c94b4b;
+    --green-vine: #7a9a6e;
+    --brass: #c9a65c;
+    --cat-orange: #e8985e;
+    --shadow: rgba(120, 80, 40, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Sunlight gradient from upper left */
+  .sunlight-wash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 15% 10%, rgba(252,228,200,0.55) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% 90%, rgba(244,212,216,0.2) 0%, transparent 50%);
+  }
+
+  /* Paper texture */
+  .paper-texture {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139,105,20,0.5) 2px, rgba(139,105,20,0.5) 2.1px);
+  }
+
+  .content-layer { position: relative; z-index: 1; }
+
+  /* Warm divider */
+  .warm-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(180,150,120,0.3) 20%, rgba(180,150,120,0.5) 50%, rgba(180,150,120,0.3) 80%, transparent);
+    border: none;
+  }
+
+  /* CTA button - like a hand-carved wooden sign */
+  .wooden-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: var(--wood);
+    color: #fffdf7;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 12px rgba(139,105,20,0.18);
+    text-decoration: none;
+  }
+  .wooden-btn:hover {
+    background: #b89568;
+    box-shadow: 0 4px 20px rgba(139,105,20,0.28);
+    transform: translateY(-1px);
+  }
+  .wooden-btn:active { transform: scale(0.98); }
+
+  /* Shopfront card */
+  .shop-card {
+    background: rgba(255,252,247,0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(196,168,130,0.25);
+    border-radius: 8px;
+    padding: 32px;
+    transition: all 0.4s ease;
+  }
+  .shop-card:hover {
+    border-color: rgba(196,168,130,0.5);
+    background: rgba(255,252,247,0.85);
+    box-shadow: 0 8px 32px var(--shadow);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* Cat tail wag */
+  @keyframes tailWag {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(6deg); }
+  }
+  .cat-tail { animation: tailWag 4s ease-in-out infinite; transform-origin: bottom right; }
+
+  /* Steam from teapot */
+  @keyframes steam {
+    0%, 100% { opacity: 0.3; transform: translateY(0) scale(1); }
+    50% { opacity: 0.7; transform: translateY(-8px) scale(1.15); }
+  }
+  .steam { animation: steam 3s ease-in-out infinite; }
+
+  /* Blossom gentle sway */
+  @keyframes blossomSway {
+    0%, 100% { transform: rotate(-1deg); }
+    50% { transform: rotate(2deg); }
+  }
+  .blossom-branch { animation: blossomSway 6s ease-in-out infinite; transform-origin: bottom right; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .cat-tail, .steam, .blossom-branch { animation: none; }
+    .wooden-btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sunlight-wash"></div>
+<div class="paper-texture"></div>
+<div class="content-layer">
+
+<!-- Navigation -->
+<nav style="background: rgba(253,246,238,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: fixed; top: 0; left: 0; right: 0; z-index: 50; border-bottom: 1px solid rgba(196,168,130,0.15);">
+  <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+    <span class="text-lg tracking-wider font-light" style="color: var(--ink);">泰来居</span>
+    <div class="flex gap-8 text-sm" style="color: var(--ink-light);">
+      <a href="#about" class="hover:text-[#3d2b1a] transition-colors duration-300">关于粥粥</a>
+      <a href="#service" class="hover:text-[#3d2b1a] transition-colors duration-300">问卦</a>
+      <a href="#contact" class="hover:text-[#3d2b1a] transition-colors duration-300">预约</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero - the shopfront scene -->
+<section class="min-h-[100dvh] flex items-center justify-center pt-14">
+  <div class="max-w-5xl mx-auto px-6 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+      <!-- Left: shopfront illustration (CSS art) -->
+      <div class="lg:col-span-6 flex justify-center reveal">
+        <div class="relative w-full max-w-md" style="aspect-ratio: 4/5;">
+
+          <!-- Background wall: warm cream -->
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, #fef5e7 0%, #fdf0de 30%, #fae8d0 100%); border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(139,105,20,0.12);">
+
+            <!-- Wooden door -->
+            <div style="position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); width: 38%; height: 55%; background: linear-gradient(180deg, #d4b896 0%, #c4a47a 30%, #ba9a6e 100%); border-radius: 3px 3px 0 0; box-shadow: inset 0 0 0 3px #b8945e;">
+              <!-- Wood grain lines -->
+              <div style="position: absolute; top: 15%; left: 15%; right: 15%; bottom: 15%; opacity: 0.25; background: repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(139,105,20,0.8) 8px, rgba(139,105,20,0.8) 8.5px);"></div>
+              <!-- Door handle - brass ring -->
+              <div style="position: absolute; right: 18%; top: 48%; width: 8px; height: 8px; border-radius: 50%; background: var(--brass); box-shadow: 0 0 0 3px rgba(201,166,92,0.3), 0 2px 6px rgba(0,0,0,0.15);"></div>
+              <!-- Threshold -->
+              <div style="position: absolute; bottom: -6px; left: -4%; width: 108%; height: 12px; background: #a08060; border-radius: 2px;"></div>
+              <!-- Fat orange cat on threshold -->
+              <div class="cat-tail" style="position: absolute; bottom: 8px; right: -18px; width: 22px; height: 10px; background: var(--cat-orange); border-radius: 50%; z-index: 2;"></div>
+            </div>
+
+            <!-- Signboard above door -->
+            <div style="position: absolute; top: 22%; left: 50%; transform: translateX(-50%); width: 55%; height: 16%; background: linear-gradient(180deg, #e8d5b0 0%, #dcc8a0 100%); border-radius: 4px; box-shadow: 0 4px 16px rgba(139,105,20,0.2), inset 0 2px 0 rgba(255,255,255,0.4); border: 2px solid #b8945e;">
+              <!-- 泰来居 text -->
+              <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; letter-spacing: 0.3em; color: #4a3020; font-weight: 500;">泰来居</div>
+              <!-- 回纹 decoration on edges -->
+              <div style="position: absolute; top: 3px; left: 8px; right: 8px; height: 1px; background: repeating-linear-gradient(90deg, #b8945e 0px, #b8945e 4px, transparent 4px, transparent 8px);"></div>
+              <div style="position: absolute; bottom: 3px; left: 8px; right: 8px; height: 1px; background: repeating-linear-gradient(90deg, #b8945e 0px, #b8945e 4px, transparent 4px, transparent 8px);"></div>
+            </div>
+
+            <!-- Bagua mirror above door center -->
+            <div style="position: absolute; top: 16%; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle, #e8d5a0 0%, #c9a65c 40%, #a08040 100%); box-shadow: 0 2px 8px rgba(139,105,20,0.3), inset 0 1px 2px rgba(255,255,255,0.4);"></div>
+
+            <!-- Red paper couplets left -->
+            <div style="position: absolute; left: 16%; top: 40%; width: 18px; height: 46%; background: linear-gradient(180deg, #d44b4b 0%, #c94040 100%); border-radius: 2px; box-shadow: 0 2px 8px rgba(180,40,40,0.2); transform: rotate(-1deg);">
+              <div style="writing-mode: vertical-rl; font-size: 7px; color: #1a0a0a; padding: 6px 2px; letter-spacing: 0.2em; line-height: 2; text-align: center;">问感情问财运</div>
+            </div>
+            <!-- Red paper couplets right -->
+            <div style="position: absolute; right: 16%; top: 40%; width: 18px; height: 46%; background: linear-gradient(180deg, #d44b4b 0%, #c94040 100%); border-radius: 2px; box-shadow: 0 2px 8px rgba(180,40,40,0.2); transform: rotate(1deg);">
+              <div style="writing-mode: vertical-rl; font-size: 7px; color: #1a0a0a; padding: 6px 2px; letter-spacing: 0.2em; line-height: 2; text-align: center;">问事业问婚姻</div>
+            </div>
+
+            <!-- Wooden price sign right side -->
+            <div style="position: absolute; right: 8%; bottom: 30%; width: 42px; height: 55px; background: linear-gradient(180deg, #e8d5b0 0%, #dcc8a0 100%); border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transform: rotate(2deg); border: 1px solid #c4a882;">
+              <div style="font-size: 8px; color: #3d2b1a; text-align: center; padding: 6px 2px; line-height: 1.6; writing-mode: vertical-rl;">一卦50</div>
+            </div>
+
+            <!-- Potted plant left side -->
+            <div style="position: absolute; left: 5%; bottom: 10%; width: 32px; height: 28px; background: #a08060; border-radius: 2px 2px 4px 4px;">
+              <div style="position: absolute; bottom: 100%; left: -8px; width: 48px; height: 32px;">
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: var(--green-vine); border-radius: 50% 50% 0 0; opacity: 0.8;"></div>
+                <!-- Vine tendrils -->
+                <div style="position: absolute; bottom: 6px; left: -4px; width: 18px; height: 4px; background: var(--green-vine); border-radius: 2px; transform: rotate(-20deg); opacity: 0.7;"></div>
+                <div style="position: absolute; bottom: 12px; right: -4px; width: 14px; height: 3px; background: var(--green-vine); border-radius: 2px; transform: rotate(15deg); opacity: 0.7;"></div>
+              </div>
+            </div>
+
+            <!-- Small teapot and cups on windowsill left -->
+            <div style="position: absolute; left: 6%; bottom: 40%; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+              <div style="width: 16px; height: 12px; background: #8b5e4b; border-radius: 50%; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.15);">
+                <!-- Teapot spout -->
+                <div style="position: absolute; left: -4px; top: 2px; width: 6px; height: 3px; background: #8b5e4b; border-radius: 1px; transform: rotate(-20deg);"></div>
+                <!-- Steam -->
+                <div class="steam" style="position: absolute; top: -8px; left: 4px; width: 6px; height: 4px; background: rgba(255,255,255,0.6); border-radius: 50%; filter: blur(2px);"></div>
+              </div>
+              <div style="display: flex; gap: 2px;">
+                <div style="width: 7px; height: 6px; background: #a07050; border-radius: 50%;"></div>
+                <div style="width: 7px; height: 6px; background: #a07050; border-radius: 50%;"></div>
+              </div>
+            </div>
+
+            <!-- Plum blossom branch from top right -->
+            <div class="blossom-branch" style="position: absolute; top: 0; right: 15%; width: 3px; height: 50px; background: #8b6b5a; border-radius: 1px; transform: rotate(15deg);">
+              <!-- Branch subdivision -->
+              <div style="position: absolute; top: 10px; left: 2px; width: 2px; height: 30px; background: #8b6b5a; border-radius: 1px; transform: rotate(-25deg);"></div>
+              <!-- Blossoms -->
+              <div style="position: absolute; top: 4px; left: -6px; width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle, #fff 20%, var(--blossom) 70%); opacity: 0.9;"></div>
+              <div style="position: absolute; top: 18px; left: -8px; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle, #fff 20%, var(--blossom) 70%); opacity: 0.85;"></div>
+              <div style="position: absolute; top: 30px; left: 4px; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle, #fff 20%, var(--blossom) 75%); opacity: 0.8;"></div>
+              <div style="position: absolute; top: 8px; left: -2px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle, #fef 20%, #f0c8d0 80%); opacity: 0.7;"></div>
+              <div style="position: absolute; top: 26px; left: 10px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle, #fef 20%, #f0c8d0 80%); opacity: 0.7;"></div>
+            </div>
+
+            <!-- Sunlight ray from top-left -->
+            <div style="position: absolute; top: 0; left: 0; right: 70%; bottom: 0; background: linear-gradient(135deg, rgba(255,240,210,0.3) 0%, transparent 70%); pointer-events: none;"></div>
+          </div>
+
+          <!-- Shadow on ground -->
+          <div style="position: absolute; bottom: -8px; left: 15%; right: 15%; height: 12px; background: rgba(139,105,20,0.1); border-radius: 50%; filter: blur(8px);"></div>
+        </div>
+      </div>
+
+      <!-- Right: hero text -->
+      <div class="lg:col-span-6 reveal" style="transition-delay: 200ms;">
+        <p class="text-sm tracking-[0.15em] mb-5" style="color: var(--ink-light);">
+          藏在老街巷子里的中式命理馆
+        </p>
+        <h1 class="text-5xl md:text-6xl tracking-tight leading-[1.08] mb-6" style="font-weight: 200; color: var(--ink);">
+          走进去<br>
+          就会被<span style="color: #c97a4a;">温柔对待</span>
+        </h1>
+        <p class="text-base leading-relaxed mb-10 max-w-[50ch]" style="color: var(--ink-light);">
+          没有吓人的卦辞，没有冷冰冰的批命。粥粥在泰来居煮好茶等你，
+          你问什么，卦上有什么说什么。没灾不编灾，有事说解法。
+        </p>
+        <div class="flex gap-4">
+          <a href="#contact" class="wooden-btn">
+            预约问卦
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <a href="#service" style="display: inline-flex; align-items: center; padding: 16px 28px; color: var(--ink-light); font-size: 15px; border: 1px solid rgba(196,168,130,0.3); border-radius: 4px; text-decoration: none; transition: all 0.3s ease;" onmouseover="this.style.borderColor='rgba(196,168,130,0.6)'; this.style.color='#3d2b1a';" onmouseout="this.style.borderColor='rgba(196,168,130,0.3)'; this.style.color='#6b5a4a';">
+            看看能问什么
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="warm-divider"></div>
+
+<!-- About 粥粥 -->
+<section id="about" class="py-28 lg:py-36">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+      <!-- Portrait area -->
+      <div class="reveal flex justify-center">
+        <div class="relative w-56 h-56 rounded-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(135deg, #fef5e7 0%, #fce4c8 50%, #f4d4d8 100%); box-shadow: 0 8px 40px rgba(139,105,20,0.12);">
+          <!-- Simple illustrated portrait placeholder -->
+          <div class="text-center">
+            <div style="width: 60px; height: 60px; margin: 0 auto 8px; border-radius: 50%; background: #e0c8b0; position: relative;">
+              <div style="position: absolute; top: 12px; left: 16px; width: 8px; height: 6px; background: #3d2b1a; border-radius: 50%; opacity: 0.6;"></div>
+              <div style="position: absolute; top: 12px; right: 16px; width: 8px; height: 6px; background: #3d2b1a; border-radius: 50%; opacity: 0.6;"></div>
+              <div style="position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: 10px; height: 5px; border-bottom: 2px solid #c97a4a; border-radius: 50%;"></div>
+            </div>
+            <p style="color: var(--ink-light); font-size: 14px;">粥粥</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="reveal" style="transition-delay: 150ms;">
+        <p class="text-xs tracking-[0.15em] mb-4" style="color: var(--ink-light);">关于粥粥</p>
+        <h2 class="text-3xl md:text-4xl tracking-tight leading-tight mb-6" style="font-weight: 200;">
+          不喜欢把命理<br>搞得太沉重
+        </h2>
+        <p class="text-sm leading-relaxed mb-4" style="color: var(--ink-light);">
+          学易多年，从周易原文开始啃。卦辞爻辞一条一条读过来，发现古人说的和现代人怕的不是一回事。命理不是吓唬人的工具，是拿来理解自己处境的。
+        </p>
+        <p class="text-sm leading-relaxed mb-4" style="color: var(--ink-light);">
+          在泰来居，没有"你最近有灾"这种开场白。你来问感情、问工作、问拿不准的事，我起卦，解卦，把卦上说的翻译成你能听懂的话。好的说好，不好的说怎么办。
+        </p>
+        <p class="text-sm leading-relaxed" style="color: var(--ink-light);">
+          茶壶里永远有热茶。门口那只胖橘叫阿福，来的时候可以摸。
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="warm-divider"></div>
+
+<!-- Services: what you can ask -->
+<section id="service" class="py-28 lg:py-36">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="reveal text-center mb-16">
+      <h2 class="text-3xl md:text-4xl tracking-tight mb-4" style="font-weight: 200;">
+        你想问什么
+      </h2>
+      <p class="text-sm" style="color: var(--ink-light);">
+        卦不妄作，有疑则问
+      </p>
+    </div>
+
+    <!-- Four topics, hand-drawn card style -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="shop-card reveal text-center" style="transition-delay: 0ms;">
+        <p class="text-3xl mb-4">🌸</p>
+        <h3 class="text-lg mb-2 tracking-tight" style="font-weight: 300;">问感情</h3>
+        <p class="text-xs leading-relaxed" style="color: var(--ink-light);">
+          两个人的卦一起看，看走向也看卡点。不分对错，只看卦象。
+        </p>
+      </div>
+      <div class="shop-card reveal text-center" style="transition-delay: 100ms;">
+        <p class="text-3xl mb-4">💰</p>
+        <h3 class="text-lg mb-2 tracking-tight" style="font-weight: 300;">问财运</h3>
+        <p class="text-xs leading-relaxed" style="color: var(--ink-light);">
+          不是"你会不会发财"，是这个阶段该守还是该动，方向在哪。
+        </p>
+      </div>
+      <div class="shop-card reveal text-center" style="transition-delay: 200ms;">
+        <p class="text-3xl mb-4">📋</p>
+        <h3 class="text-lg mb-2 tracking-tight" style="font-weight: 300;">问事业</h3>
+        <p class="text-xs leading-relaxed" style="color: var(--ink-light);">
+          跳槽、转行、创业、考研，拿不准的时候来看一卦。卦给你方向，决定你自己做。
+        </p>
+      </div>
+      <div class="shop-card reveal text-center" style="transition-delay: 300ms;">
+        <p class="text-3xl mb-4">💍</p>
+        <h3 class="text-lg mb-2 tracking-tight" style="font-weight: 300;">问婚姻</h3>
+        <p class="text-xs leading-relaxed" style="color: var(--ink-light);">
+          婚期、合盘、两家相处，都可以问。卦不会替你做主，但帮你把看不见的看清楚。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="warm-divider"></div>
+
+<!-- Process: how it works -->
+<section class="py-28 lg:py-36">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="reveal text-center mb-16">
+      <h2 class="text-3xl md:text-4xl tracking-tight mb-4" style="font-weight: 200;">
+        怎么问
+      </h2>
+    </div>
+
+    <div class="space-y-1 reveal" style="transition-delay: 100ms;">
+      <div class="shop-card flex gap-6 items-start">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm" style="background: var(--sunlight); color: var(--ink); font-weight: 300;">1</div>
+        <div>
+          <h3 class="text-base mb-1 tracking-tight" style="font-weight: 300;">微信上说一声</h3>
+          <p class="text-xs leading-relaxed" style="color: var(--ink-light);">加粥粥微信，告诉我想问什么。不用长篇背景，一句话就够。</p>
+        </div>
+      </div>
+      <div class="shop-card flex gap-6 items-start">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm" style="background: var(--sunlight); color: var(--ink); font-weight: 300;">2</div>
+        <div>
+          <h3 class="text-base mb-1 tracking-tight" style="font-weight: 300;">粥粥起卦</h3>
+          <p class="text-xs leading-relaxed" style="color: var(--ink-light);">你择数也好、择字也好、或者粥粥以时起卦。卦成，先读象。</p>
+        </div>
+      </div>
+      <div class="shop-card flex gap-6 items-start">
+        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm" style="background: var(--sunlight); color: var(--ink); font-weight: 300;">3</div>
+        <div>
+          <h3 class="text-base mb-1 tracking-tight" style="font-weight: 300;">收到解卦文字</h3>
+          <p class="text-xs leading-relaxed" style="color: var(--ink-light);">卦辞、爻辞、体用生克，翻译成大白话发给你。不像算命，像朋友帮你分析一件事。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="warm-divider"></div>
+
+<!-- Contact / Booking -->
+<section id="contact" class="py-28 lg:py-36">
+  <div class="max-w-2xl mx-auto px-6 text-center reveal">
+    <p class="text-sm tracking-[0.15em] mb-4" style="color: var(--ink-light);">来泰来居坐坐</p>
+    <h2 class="text-3xl md:text-4xl tracking-tight mb-6" style="font-weight: 200;">
+      茶是热的，猫在门口
+    </h2>
+    <p class="text-sm leading-relaxed mb-10 max-w-[50ch] mx-auto" style="color: var(--ink-light);">
+      添加粥粥微信，告诉我你想问什么。不急的单子慢慢解，每卦都认真。
+    </p>
+
+    <!-- Contact card -->
+    <div class="shop-card inline-block text-left max-w-sm w-full reveal" style="transition-delay: 150ms;">
+      <div class="space-y-4">
+        <div class="flex justify-between items-center text-sm">
+          <span style="color: var(--ink-light);">微信</span>
+          <span style="color: var(--ink); font-weight: 300;">ZhouZhou_Tailai</span>
+        </div>
+        <div style="height: 1px; background: rgba(196,168,130,0.2);"></div>
+        <div class="flex justify-between items-center text-sm">
+          <span style="color: var(--ink-light);">一卦</span>
+          <span style="color: var(--ink); font-weight: 300;">50</span>
+        </div>
+        <div style="height: 1px; background: rgba(196,168,130,0.2);"></div>
+        <div class="flex justify-between items-center text-sm">
+          <span style="color: var(--ink-light);">营业</span>
+          <span style="color: var(--ink); font-weight: 300;">不急不赶，卦成即复</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="py-10 text-center">
+  <p class="text-xs" style="color: rgba(139,105,20,0.4);">泰来居 · 粥粥 · 以卦观心</p>
+</footer>
+
+</div>
+
+<script>
+(function() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
+</body>
+</html>
